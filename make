@@ -44,7 +44,7 @@ submit () {
     else
         wait -n
     fi
-    ("$@") &
+    "$@" &
 }
 
 waitall () {
