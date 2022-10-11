@@ -9,6 +9,9 @@ compile_flags="-iquote include"
 link_flags=""
 max_threads=4
 
+build_dir=.build
+src_dir=src
+
 set -e
 shopt -s nullglob
 cd "$(dirname "$0")"
@@ -30,7 +33,7 @@ compile () {
     elif [[ $in == *.conf ]]; then
         . "$in"
     else
-        local out=".build/$in.o"
+        local out="$build_dir/$in.o"
         step mkdir -p "$(dirname "$out")"
         submit step $cc $flags -c $compile_flags -o "$out" "$in"
         objs[${#objs[@]}]="$out"
@@ -55,7 +58,7 @@ waitall () {
     done
 }
 
-step rm -rf .build
-compile src
+step rm -rf $build_dir
+compile $src_dir
 waitall
-step $cc $flags -o .build/"$name" "${objs[@]}" $link_flags
+step $cc $flags -o $build_dir/"$name" "${objs[@]}" $link_flags
