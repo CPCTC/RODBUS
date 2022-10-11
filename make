@@ -58,7 +58,11 @@ waitall () {
     done
 }
 
-step rm -rf $build_dir
-compile $src_dir
-waitall
-step $cc $flags -o $build_dir/"$name" "${objs[@]}" $link_flags
+main () {
+    step rm -rf $build_dir
+    compile $src_dir
+    waitall
+    step $cc $flags -o $build_dir/"$name" "${objs[@]}" $link_flags
+}
+
+main
