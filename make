@@ -59,10 +59,10 @@ waitall () {
 }
 
 main () {
-    step rm -rf $build_dir
-    compile $src_dir
+    step rm -rf "$build_dir"
+    compile "$src_dir"
     waitall
-    step $cc $flags -o $build_dir/"$name" "${objs[@]}" $link_flags
+    step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
 }
 
 main
