@@ -30,13 +30,17 @@ compile () {
                 compile "$file"
             fi
         done
-    elif [[ $in == *.conf ]]; then
-        . "$in"
     else
-        local out="$build_dir/$in.o"
+        local out="$build_dir/$in"
         step mkdir -p "$(dirname "$out")"
-        submit step $cc $flags -c $compile_flags -o "$out" "$in"
-        objs[${#objs[@]}]="$out"
+        if [[ $in == *.conf ]]; then
+            in="$(echo "$in" | sed 's|\.conf$||')" \
+                out="$build_dir/$in" \
+                . "$in"
+        else
+            submit step $cc $flags -c $compile_flags -o "$out.o" "$in"
+            objs[${#objs[@]}]="$out.o"
+        fi
     fi
 }
 
