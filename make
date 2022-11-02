@@ -32,7 +32,7 @@ compile () {
         done
     else
         local out="$build_dir/$in"
-        step mkdir -p "$(dirname "$out")"
+        mkdir -p "$(dirname "$out")"
         if [[ $in == *.conf ]]; then
             in="$(echo "$in" | sed 's|\.conf$||')" \
                 out="$build_dir/$in" \
@@ -63,7 +63,7 @@ waitall () {
 }
 
 main () {
-    step rm -rf "$build_dir"
+    rm -rf "$build_dir"
     compile "$src_dir"
     waitall
     step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
