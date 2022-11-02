@@ -21,6 +21,12 @@ step () {
     "$@"
 }
 
+compiler=default_compiler
+default_compiler () {
+    submit step $cc $flags -c $compile_flags -o "$out.o" "$in"
+    objs[${#objs[@]}]="$out.o"
+}
+
 compile () {
     local in="$1"; shift
 
@@ -38,8 +44,7 @@ compile () {
                 out="$build_dir/$in" \
                 . "$in"
         else
-            submit step $cc $flags -c $compile_flags -o "$out.o" "$in"
-            objs[${#objs[@]}]="$out.o"
+            $compiler
         fi
     fi
 }
