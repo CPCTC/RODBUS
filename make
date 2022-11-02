@@ -16,14 +16,23 @@ set -e
 shopt -s nullglob
 cd "$(dirname "$0")"
 
-step () {
+step=pretty_step
+pretty_step () {
+    if [[ -v in ]]; then
+        echo "CC $in"
+    else
+        echo "LD"
+    fi
+    "$@"
+}
+dbg_step () {
     echo "$@"
     "$@"
 }
 
 compiler=default_compiler
 default_compiler () {
-    submit step $cc $flags -c $compile_flags -o "$out.o" "$in"
+    submit $step $cc $flags -c $compile_flags -o "$out.o" "$in"
     objs[${#objs[@]}]="$out.o"
 }
 
@@ -79,7 +88,7 @@ main () {
         compile "$src_dir"
     fi
     waitall
-    step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
+    $step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
 }
 
 main
