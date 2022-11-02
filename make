@@ -16,10 +16,10 @@ set -e
 shopt -s nullglob
 cd "$(dirname "$0")"
 
-step () (
+step () {
     echo "$@"
     "$@"
-)
+}
 
 compile () {
     local in="$1"; shift
