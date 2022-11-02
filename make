@@ -32,15 +32,19 @@ compile () {
 
     if [[ -d $in ]]; then
         for file in "$in"/*; do
-            if [[ ! -f $file.conf ]]; then
-                compile "$file"
+            if [[ $file != */conf && ! -f $file.conf ]]; then
+                if [[ -f $file/conf ]]; then
+                    compile "$file/conf"
+                else
+                    compile "$file"
+                fi
             fi
         done
     else
         local out="$build_dir/$in"
         mkdir -p "$(dirname "$out")"
-        if [[ $in == *.conf ]]; then
-            in="$(echo "$in" | sed 's|\.conf$||')" \
+        if [[ $in =~ [./]conf$ ]]; then
+            in="$(echo "$in" | sed 's|.conf$||')" \
                 out="$build_dir/$in" \
                 . "$in"
         else
@@ -69,7 +73,11 @@ waitall () {
 
 main () {
     rm -rf "$build_dir"
-    compile "$src_dir"
+    if [[ -f "$src_dir/conf" ]]; then
+        compile "$src_dir/conf"
+    else
+        compile "$src_dir"
+    fi
     waitall
     step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
 }
