@@ -81,6 +81,7 @@ waitall () {
 }
 
 main () {
+    eval "$@"
     rm -rf "$build_dir"
     if [[ -f "$src_dir/conf" ]]; then
         compile "$src_dir/conf"
@@ -91,4 +92,4 @@ main () {
     $step $cc $flags -o "$build_dir/$name" "${objs[@]}" $link_flags
 }
 
-main
+main "$@"
