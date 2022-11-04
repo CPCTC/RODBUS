@@ -12,6 +12,12 @@ max_threads=4
 build_dir=.build
 src_dir=src
 
+declare -A cmds
+
+#
+# End Config
+#
+
 set -e
 shopt -s nullglob
 cd "$(dirname "$0")"
@@ -82,6 +88,7 @@ waitall () {
 
 main () {
     eval "$@"
+    eval "${cmds[@]}"
     rm -rf "$build_dir"
     if [[ -f "$src_dir/conf" ]]; then
         compile "$src_dir/conf"
