@@ -87,9 +87,9 @@ waitall () {
 }
 
 main () {
+    rm -rf "$build_dir"
     eval "$@"
     eval "${cmds[@]}"
-    rm -rf "$build_dir"
     if [[ -f "$src_dir/conf" ]]; then
         compile "$src_dir/conf"
     else
