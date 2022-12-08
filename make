@@ -12,8 +12,6 @@ max_threads=4
 build_dir=.build
 src_dir=src
 
-declare -A cmds
-
 #
 # End Config
 #
