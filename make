@@ -71,17 +71,22 @@ submit () {
     if [[ $threads -lt $max_threads ]]; then
         threads=$(($threads + 1))
     else
-        wait -n
+        wait -n || {
+            threads=$(($threads - 1))
+            waitall
+            return 1
+        }
     fi
     "$@" &
 }
 
 waitall () {
-    # plain `wait` would not check all return values
+    local r=0
     while [[ $threads -ne 0 ]]; do
-        wait -n
+        wait -n || r=1
         threads=$(($threads - 1))
     done
+    return $r
 }
 
 main () {
